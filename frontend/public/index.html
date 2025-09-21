@@ -1323,17 +1323,31 @@
         }
 
         function showApp() {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block';
+            console.log('Showing app for user:', currentUser);
             
-            // Update cashier name
-            const cashierName = document.getElementById('cashierName');
-            if (cashierName && currentUser) {
-                cashierName.textContent = currentUser.name;
+            const loginPage = document.getElementById('loginPage');
+            const appContainer = document.getElementById('appContainer');
+            
+            if (loginPage && appContainer) {
+                loginPage.style.display = 'none';
+                appContainer.style.display = 'block';
+                
+                // Update cashier name
+                const cashierName = document.getElementById('cashierName');
+                if (cashierName && currentUser) {
+                    cashierName.textContent = currentUser.name;
+                }
+                
+                // Add entrance animation
+                appContainer.classList.add('fade-in');
+                
+                // Re-render menu to ensure it's visible
+                renderMenuItems(menuItems);
+                
+                console.log('App displayed successfully');
+            } else {
+                console.error('Login page or app container not found');
             }
-            
-            // Add entrance animation
-            document.getElementById('appContainer').classList.add('fade-in');
         }
 
         function logout() {

@@ -1275,16 +1275,26 @@
 
         function handleLogin(event) {
             event.preventDefault();
+            console.log('Login form submitted');
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            console.log('Attempting login for username:', username);
+            
+            if (!username || !password) {
+                showAlert('Username dan password harus diisi!', 'error');
+                return;
+            }
             
             const button = event.target.querySelector('button[type="submit"]');
-            button.classList.add('loading');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            button.disabled = true;
             
             // Simulate authentication delay
             setTimeout(() => {
-                const user = demoUsers[username];
+                const user = demoUsers[username.toLowerCase()];
                 
                 if (user && user.password === password) {
                     currentUser = {
@@ -1293,14 +1303,17 @@
                         role: user.role
                     };
                     
+                    console.log('Login successful for user:', currentUser);
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     showApp();
                     showAlert('Login berhasil! Selamat datang, ' + user.name, 'success');
                 } else {
+                    console.log('Login failed for username:', username);
                     showAlert('Username atau password salah!', 'error');
                 }
                 
-                button.classList.remove('loading');
+                button.innerHTML = originalText;
+                button.disabled = false;
             }, 1000);
         }
 

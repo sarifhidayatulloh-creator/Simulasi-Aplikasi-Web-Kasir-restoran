@@ -1189,16 +1189,9 @@
 
         // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is already logged in
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                showApp();
-            } else {
-                showLoginPage();
-            }
-
-            // Initialize menu data
+            console.log('DOM loaded, initializing app...');
+            
+            // Initialize menu data first
             initializeMenuData();
 
             // Start real-time clock
@@ -1206,6 +1199,23 @@
 
             // Setup event listeners
             setupEventListeners();
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    showApp();
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                    localStorage.removeItem('currentUser');
+                    showLoginPage();
+                }
+            } else {
+                showLoginPage();
+            }
+            
+            console.log('App initialized successfully');
         });
 
         function initializeMenuData() {

@@ -1380,22 +1380,29 @@
         }
 
         function renderMenuItems(items) {
+            console.log('Rendering menu items:', items.length);
             const menuGrid = document.getElementById('menuGrid');
-            if (!menuGrid) return;
+            if (!menuGrid) {
+                console.error('MenuGrid element not found');
+                return;
+            }
             
             menuGrid.innerHTML = '';
             
-            items.forEach(item => {
+            items.forEach((item, index) => {
                 const menuItemElement = document.createElement('div');
                 menuItemElement.className = 'menu-item fade-in';
+                menuItemElement.style.animationDelay = `${index * 0.1}s`;
                 menuItemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                    <img src="${item.image}" alt="${item.name}" 
+                         onerror="this.src='https://via.placeholder.com/400x200/e2e8f0/718096?text=Menu+Item'"
+                         loading="lazy">
                     <div class="menu-item-content">
                         <h3>${item.name}</h3>
                         <p>${item.description}</p>
                         <div class="menu-item-footer">
                             <span class="price">Rp ${formatCurrency(item.price)}</span>
-                            <button class="add-to-cart" onclick="addToCart(${item.id})">
+                            <button class="add-to-cart" onclick="addToCart(${item.id})" data-item-id="${item.id}">
                                 <i class="fas fa-plus"></i> Tambah
                             </button>
                         </div>
@@ -1403,6 +1410,8 @@
                 `;
                 menuGrid.appendChild(menuItemElement);
             });
+            
+            console.log('Menu items rendered successfully');
         }
 
         function handleCategoryFilter(event) {

@@ -35,14 +35,30 @@ const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post(`${API}/auth/login`, { username, password });
+      console.log('Attempting login with:', username);
+      console.log('API URL:', API);
+      
+      const response = await axios.post(`${API}/auth/login`, { 
+        username, 
+        password 
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Login response:', response.data);
+      
       const { access_token, user: userData } = response.data;
       
       localStorage.setItem('token', access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       setUser(userData);
+      
+      console.log('Login successful, user set:', userData);
       return true;
     } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
       throw new Error(error.response?.data?.detail || 'Login gagal');
     }
   };

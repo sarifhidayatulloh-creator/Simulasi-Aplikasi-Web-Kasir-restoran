@@ -24,9 +24,12 @@ const AuthProvider = ({ children }) => {
 
   const fetchProfile = async () => {
     try {
+      console.log('Fetching profile...');
       const response = await axios.get(`${API}/auth/profile`);
+      console.log('Profile response:', response.data);
       setUser(response.data);
     } catch (error) {
+      console.error('Profile fetch error:', error);
       localStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
     }
